@@ -7,12 +7,13 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 # download nltk corpus (first time only)
 import nltk
+import pickle
 
 nltk.download('all')
 
 # Load the amazon review dataset
 # https://raw.githubusercontent.com/pycaret/pycaret/master/datasets/amazon.csv
-df = pd.read_csv('<csv_file>') 
+df = pd.read_csv('https://raw.githubusercontent.com/pycaret/pycaret/master/datasets/amazon.csv') 
 
 # Todo: select a category and create a csv file from the positive and negative category. 
 # https://www.cs.jhu.edu/~mdredze/datasets/sentiment/index2.html
@@ -48,12 +49,24 @@ def get_sentiment(text):
     sentiment = 1 if scores['pos'] > 0 else 0
     return sentiment
 
+
+# sentimentsets = [(find_sentiments(rev), category) for (rev, category) in documents
+
 # apply get_sentiment function
 df['sentiment'] = df['reviewText'].apply(get_sentiment)
 df
+
 
 from sklearn.metrics import confusion_matrix
 print(confusion_matrix(df['Positive'], df['sentiment']))
 
 from sklearn.metrics import classification_report
 print(classification_report(df['Positive'], df['sentiment']))
+
+
+
+
+# Saving model to pickle (generated pkl file is not working as of the moment)
+# save_classifier = open("naivebayes.pickle","wb")
+# pickle.dump(df, save_classifier)
+# save_classifier.close()
